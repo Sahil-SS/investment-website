@@ -1,21 +1,37 @@
 "use client";
 
-interface SidebarProps {
-  user: { name: string };
-  onLogout: () => void;
-}
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function Sidebar({ user, onLogout }: SidebarProps) {
+export default function DashboardHeader() {
+  const [name, setName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setName(user.user_metadata?.name || "Investor");
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
-    <aside className="w-64 bg-white p-5 shadow-md flex flex-col">
-      <div className="mb-10">
-        <h2 className="font-bold text-lg">Welcome, {user.name}</h2>
-      </div>
-      <nav className="flex flex-col gap-3">
-        <button className="py-2 px-4 bg-blue-500 text-white rounded" onClick={onLogout}>
-          Logout
-        </button>
-      </nav>
-    </aside>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="mb-8"
+    >
+      <h1 className="text-3xl font-bold text-white mb-2">
+        Welcome back, {name} 👋
+      </h1>
+      <p className="text-gray-500">
+        Manage your investments and track your portfolio
+      </p>
+    </motion.div>
   );
 }

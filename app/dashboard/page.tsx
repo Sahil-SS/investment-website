@@ -1,40 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
 import Sidebar from "@/components/user-dashboard/Sidebar";
-import Navbar from "@/components/user-dashboard/Navbar";
+import DashboardHeader from "@/components/user-dashboard/DashboardHeader";
 import OrderSection from "@/components/user-dashboard/OrderSection";
-import { supabase } from "@/lib/supabaseClient";
-
 
 export default function DashboardPage() {
- const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user || null);
-    };
-    fetchUser();
-  }, []);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/sign-in"; // redirect to login
-  };
-
-  if (!user) return <p>Loading...</p>;
-
   return (
-    <div className="flex bg-gray-950 min-h-screen text-white">
-      <Sidebar user={user} onLogout={handleLogout} />
-      <div className="flex-1 flex flex-col">
-        <Navbar user={user} />
-        <main className="flex flex-col items-center p-8 space-y-8">
-          <OrderSection user={user} />
-        </main>
-      </div>
+    <div className="flex min-h-screen bg-gradient-to-b from-black via-[#050505] to-[#0a0a0a] text-white relative overflow-hidden">
+      <Sidebar active="home" />
+
+      <main className="flex-1 p-10 relative z-10">
+        <DashboardHeader />
+        <OrderSection />
+      </main>
+
+      <div className="absolute w-[600px] h-[600px] bg-green-700/10 rounded-full blur-3xl top-40 left-1/2 -z-0" />
     </div>
   );
 }
