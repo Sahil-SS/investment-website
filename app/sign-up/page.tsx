@@ -9,10 +9,15 @@ export default function SignUpPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
+    phone: "",
     email: "",
-    username: "",
+    location: "",
     password: "",
+    confirmPassword: "",
+    pan: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,13 +26,22 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { data, error } = await supabase.auth.signUp({
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
         data: {
           name: formData.name,
-          username: formData.username,
+          phone: formData.phone,
+          location: formData.location,
+          pan: formData.pan,
         },
       },
     });
@@ -35,14 +49,16 @@ export default function SignUpPage() {
     if (error) {
       alert(error.message);
     } else {
-      alert("Signup successful! Check your email to verify your account.");
-      router.push("/sign-in");
+      setSuccess(true);
+      setTimeout(() => router.push("/sign-in"), 2500);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 via-gray-950 to-black relative overflow-hidden">
-      {/* Subtle Glow Behind Card */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 via-black to-gray-950 relative overflow-hidden">
+      {/* Glow */}
       <motion.div
         initial={{ opacity: 0.2, scale: 0.95 }}
         animate={{ opacity: 0.25, scale: 1 }}
@@ -55,51 +71,88 @@ export default function SignUpPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 w-96 p-10 bg-gray-900 rounded-2xl shadow-xl border border-gray-800 space-y-6"
+        className="relative z-10 w-[22rem] p-8 bg-gray-900 rounded-2xl shadow-xl border border-gray-800 space-y-4"
       >
-        <h1 className="text-3xl font-semibold text-center text-white tracking-wide mb-6">
+        <h1 className="text-3xl font-semibold text-center text-white mb-6">
           Create Account
         </h1>
+
+        {success && (
+          <p className="text-green-400 text-center font-medium">
+            ✅ Successfully registered! Redirecting...
+          </p>
+        )}
 
         <input
           type="text"
           name="name"
           placeholder="Full Name"
           onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-400 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition"
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
         />
         <input
-          type="text"
-          name="username"
-          placeholder="Username"
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
           onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-400 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition"
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
         />
         <input
           type="email"
           name="email"
           placeholder="Email"
           onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-400 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition"
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
+        />
+        <input
+          type="text"
+          name="pan"
+          placeholder="PAN Number"
+          onChange={handleChange}
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          onChange={handleChange}
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Create Password"
           onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 placeholder-gray-400 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition"
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          onChange={handleChange}
+          required
+          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:border-green-500 outline-none"
         />
 
         <motion.button
-          whileHover={{ scale: 1.03, boxShadow: "0px 8px 20px rgba(16, 185, 129, 0.4)" }}
+          whileHover={{
+            scale: 1.03,
+            boxShadow: "0px 8px 20px rgba(16, 185, 129, 0.4)",
+          }}
           whileTap={{ scale: 0.97 }}
+          disabled={loading}
           type="submit"
           className="w-full py-3 bg-gradient-to-r from-green-600 to-green-500 rounded-lg font-semibold text-white tracking-wide transition"
         >
-          Sign Up
+          {loading ? "Creating..." : "Sign Up"}
         </motion.button>
 
-        {/* Bottom message */}
         <p className="text-center text-gray-400 mt-4">
           Already have an account?{" "}
           <span
