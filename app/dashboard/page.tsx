@@ -100,21 +100,21 @@ export default function UserDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen text-gray-400">
+      <div className="flex items-center justify-center h-screen text-gray-600">
         Loading Dashboard...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-[#050505] to-[#0a0a0a] text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-white via-[#f9f9f9] to-[#f5f5f5] text-gray-900 flex flex-col">
       {/* NAVBAR */}
-      <nav className="flex items-center justify-between px-10 py-5 border-b border-gray-800 bg-black/60 backdrop-blur-xl sticky top-0 z-20">
+      <nav className="flex items-center justify-between px-10 py-5 border-b border-gray-200 bg-white/70 backdrop-blur-xl sticky top-0 z-20 shadow-sm">
         {/* Left side user info */}
         <div>
-          <h1 className="text-xl font-bold text-green-400">{user?.name}</h1>
-          <p className="text-sm text-gray-400">{user?.email}</p>
-          <p className="text-sm text-gray-400">{user?.phone}</p>
+          <h1 className="text-xl font-bold text-[#db071d]">{user?.name}</h1>
+          <p className="text-sm text-gray-600">{user?.email}</p>
+          <p className="text-sm text-gray-600">{user?.phone}</p>
         </div>
 
         {/* Center Nav Links */}
@@ -125,8 +125,8 @@ export default function UserDashboardPage() {
               onClick={() => setActiveTab(tab as "home" | "profile" | "loan")}
               className={`capitalize text-sm font-medium px-4 py-2 rounded-lg transition ${
                 activeTab === tab
-                  ? "bg-green-600/20 text-green-400"
-                  : "hover:text-green-300"
+                  ? "bg-[#db071d]/10 text-[#db071d] font-semibold"
+                  : "hover:text-[#db071d]"
               }`}
             >
               {tab}
@@ -137,7 +137,7 @@ export default function UserDashboardPage() {
         {/* Right Logout */}
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition"
+          className="px-4 py-2 bg-[#db071d] hover:bg-[#b40618] text-white rounded-lg transition"
         >
           Logout
         </button>
@@ -153,20 +153,19 @@ export default function UserDashboardPage() {
               transition={{ duration: 0.6 }}
               className="text-3xl font-bold mb-10 text-center"
             >
-              Welcome back, {user?.name} 👋 <br />
-              <span className="text-green-400">Your Investment Dashboard</span>
+              <span className="text-[#db071d]">Your Investment Dashboard</span>
             </motion.h1>
 
             {/* Payment Card */}
             <motion.div
-              className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl rounded-2xl shadow-[0_0_50px_-10px_rgba(16,185,129,0.8)] overflow-hidden bg-white/10 backdrop-blur-xl border border-green-500/60"
+              className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl rounded-2xl shadow-[0_0_50px_-10px_rgba(219,7,29,0.4)] overflow-hidden bg-white border border-[#db071d]/40"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
               {/* LEFT QR SIDE */}
-              <div className="md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-green-700 to-green-900 p-8 text-white">
-                <h2 className="text-2xl font-bold mb-2 text-yellow-300">
+              <div className="md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#b40618] p-8 text-white">
+                <h2 className="text-2xl font-bold mb-2 text-yellow-200">
                   EAST INDIA PROMOTER
                 </h2>
                 <p className="text-lg font-semibold mb-3">THE ARCHITIZER</p>
@@ -184,7 +183,7 @@ export default function UserDashboardPage() {
                 <p className="text-sm text-white/80 mt-3 text-center">
                   Scan and pay securely using your preferred app.
                 </p>
-                <p className="mt-2 text-sm font-semibold text-yellow-300">
+                <p className="mt-2 text-sm font-semibold text-yellow-200">
                   UPI ID:{" "}
                   <span className="text-white">
                     msthearchitizer.eazypay1@icici
@@ -196,8 +195,8 @@ export default function UserDashboardPage() {
               </div>
 
               {/* RIGHT FORM SIDE */}
-              <div className="md:w-1/2 bg-white p-8 text-gray-800 flex flex-col justify-center">
-                <h1 className="text-2xl font-bold text-center text-green-700 mb-6">
+              <div className="md:w-1/2 bg-[#fff8f8] p-8 text-gray-800 flex flex-col justify-center">
+                <h1 className="text-2xl font-bold text-center text-[#db071d] mb-6">
                   Your Investment
                 </h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -228,7 +227,7 @@ export default function UserDashboardPage() {
                       type={field.type}
                       value={form[field.name]}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300"
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#db071d] transition-all duration-300"
                       required
                     />
                   ))}
@@ -237,7 +236,7 @@ export default function UserDashboardPage() {
                     type="submit"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition"
+                    className="w-full py-3 bg-[#db071d] text-white font-semibold rounded-lg shadow-md hover:bg-[#b40618] transition"
                   >
                     Submit Investment
                   </motion.button>
@@ -246,7 +245,7 @@ export default function UserDashboardPage() {
                     <p
                       className={`text-center text-sm mt-2 ${
                         status.includes("✅")
-                          ? "text-green-600"
+                          ? "text-[#db071d]"
                           : "text-red-600"
                       }`}
                     >
@@ -260,15 +259,15 @@ export default function UserDashboardPage() {
         )}
 
         {activeTab === "profile" && (
-          <div className="text-center text-gray-400">
-            <h2 className="text-2xl mb-3 font-bold text-green-400">Profile</h2>
+          <div className="text-center text-gray-600">
+            <h2 className="text-2xl mb-3 font-bold text-[#db071d]">Profile</h2>
             <p>Profile page coming soon...</p>
           </div>
         )}
 
         {activeTab === "loan" && (
-          <div className="text-center text-gray-400">
-            <h2 className="text-2xl mb-3 font-bold text-green-400">Loan</h2>
+          <div className="text-center text-gray-600">
+            <h2 className="text-2xl mb-3 font-bold text-[#db071d]">Loan</h2>
             <p>Loan section coming soon...</p>
           </div>
         )}
