@@ -1,17 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+// Define types
+type SupabaseUser = {
+  name: string;
+  email: string;
+  phone: string;
+};
+
+type FormData = {
+  name: string;
+  phone: string;
+  amount: string;
+  utr: string;
+};
+
 export default function UserDashboardPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("home");
-  const [user, setUser] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"home" | "profile" | "loan">("home");
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormData>({
     name: "",
     phone: "",
     amount: "",
@@ -29,9 +43,9 @@ export default function UserDashboardPage() {
         router.replace("/sign-in");
       } else {
         setUser({
-          name: user.user_metadata?.name || "Investor",
-          email: user.email,
-          phone: user.user_metadata?.phone || "Not Provided",
+          name: (user.user_metadata?.name as string) || "Investor",
+          email: user.email ?? "",
+          phone: (user.user_metadata?.phone as string) || "Not Provided",
         });
       }
       setLoading(false);
@@ -44,51 +58,45 @@ export default function UserDashboardPage() {
     router.replace("/sign-in");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setStatus("Submitting...");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("Submitting...");
 
-  // Get current user first
-  const {
-    data: { user: currentUser },
-  } = await supabase.auth.getUser();
+    // Get current user first
+    const {
+      data: { user: currentUser },
+    } = await supabase.auth.getUser();
 
-  if (!currentUser) {
-    setStatus("❌ Not logged in");
-    return;
-  }
+    if (!currentUser || !user) {
+      setStatus("❌ Not logged in");
+      return;
+    }
 
-  // Insert into Supabase with user_id
-  const { error } = await supabase.from("payments").insert([
-    {
-      name: form.name,
-      phone: form.phone,
-      amount: form.amount,
-      utr: form.utr,
-      email: user.email,
-      user_id: currentUser.id, // 👈 this is critical
-    },
-  ]);
+    // Insert into Supabase with user_id
+    const { error } = await supabase.from("payments").insert([
+      {
+        name: form.name,
+        phone: form.phone,
+        amount: form.amount,
+        utr: form.utr,
+        email: user.email,
+        user_id: currentUser.id,
+      },
+    ]);
 
-  if (error) {
-    console.error(error);
-    setStatus("❌ Error submitting payment");
-  } else {
-    setStatus("✅ Investment submitted successfully!");
-    setForm({
-      name: "",
-      phone: "",
-      amount: "",
-      utr: "",
-    });
-    setTimeout(() => setStatus(""), 2000);
-  }
-};
-
+    if (error) {
+      console.error(error);
+      setStatus("❌ Error submitting payment");
+    } else {
+      setStatus("✅ Investment submitted successfully!");
+      setForm({ name: "", phone: "", amount: "", utr: "" });
+      setTimeout(() => setStatus(""), 2000);
+    }
+  };
 
   if (loading) {
     return (
@@ -104,9 +112,9 @@ const handleSubmit = async (e: React.FormEvent) => {
       <nav className="flex items-center justify-between px-10 py-5 border-b border-gray-800 bg-black/60 backdrop-blur-xl sticky top-0 z-20">
         {/* Left side user info */}
         <div>
-          <h1 className="text-xl font-bold text-green-400">{user.name}</h1>
-          <p className="text-sm text-gray-400">{user.email}</p>
-          <p className="text-sm text-gray-400">{user.phone}</p>
+          <h1 className="text-xl font-bold text-green-400">{user?.name}</h1>
+          <p className="text-sm text-gray-400">{user?.email}</p>
+          <p className="text-sm text-gray-400">{user?.phone}</p>
         </div>
 
         {/* Center Nav Links */}
@@ -114,7 +122,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           {["home", "profile", "loan"].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => setActiveTab(tab as "home" | "profile" | "loan")}
               className={`capitalize text-sm font-medium px-4 py-2 rounded-lg transition ${
                 activeTab === tab
                   ? "bg-green-600/20 text-green-400"
@@ -145,7 +153,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               transition={{ duration: 0.6 }}
               className="text-3xl font-bold mb-10 text-center"
             >
-              Welcome back, {user.name} 👋 <br />
+              Welcome back, {user?.name} 👋 <br />
               <span className="text-green-400">Your Investment Dashboard</span>
             </motion.h1>
 
@@ -193,28 +201,32 @@ const handleSubmit = async (e: React.FormEvent) => {
                   Your Investment
                 </h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {[
-                    { name: "name", placeholder: "Full Name", type: "text" },
-                    {
-                      name: "phone",
-                      placeholder: "Phone Number",
-                      type: "tel",
-                    },
-                    {
-                      name: "amount",
-                      placeholder: "Investment Amount (₹)",
-                      type: "number",
-                    },
-                    {
-                      name: "utr",
-                      placeholder: "Transaction ID / UTR Number",
-                      type: "text",
-                    },
-                  ].map((field) => (
+                  {(
+                    [
+                      { name: "name", placeholder: "Full Name", type: "text" },
+                      {
+                        name: "phone",
+                        placeholder: "Phone Number",
+                        type: "tel",
+                      },
+                      {
+                        name: "amount",
+                        placeholder: "Investment Amount (₹)",
+                        type: "number",
+                      },
+                      {
+                        name: "utr",
+                        placeholder: "Transaction ID / UTR Number",
+                        type: "text",
+                      },
+                    ] as const
+                  ).map((field) => (
                     <input
                       key={field.name}
-                      {...field}
-                      value={(form as any)[field.name]}
+                      name={field.name}
+                      placeholder={field.placeholder}
+                      type={field.type}
+                      value={form[field.name]}
                       onChange={handleChange}
                       className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300"
                       required
