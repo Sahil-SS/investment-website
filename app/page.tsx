@@ -133,7 +133,7 @@ export default function SignUpPage() {
           <h2 className="text-2xl font-bold mb-3 text-yellow-300">
             Welcome to Registration
           </h2>
-          <p className="text-white/90 text-sm text-center max-w-sm mb-3">
+          {/* <p className="text-white/90 text-sm text-center max-w-sm mb-3">
             Please fill out all fields carefully. Ensure your PAN, email, and
             phone number are accurate — duplicate entries will not be accepted.
           </p>
@@ -143,7 +143,7 @@ export default function SignUpPage() {
             <li>Enter a valid 10-digit phone number.</li>
             <li>Use correct PAN format (ABCDE1234F).</li>
             <li>Choose a strong password (min 6 characters).</li>
-          </ul>
+          </ul> */}
 
           <p className="text-xs text-yellow-300 mt-6 text-center italic">
             “Your details are safe and encrypted with us.”

@@ -74,7 +74,7 @@ export default function SignInPage() {
           <h2 className="text-2xl font-bold mb-2 text-yellow-300">
             Welcome
           </h2>
-          <p className="text-white/90 text-sm max-w-sm mb-3">
+          {/* <p className="text-white/90 text-sm max-w-sm mb-3">
             Log in to access your dashboard, manage your account, and explore
             your investments securely.
           </p>
@@ -83,7 +83,7 @@ export default function SignInPage() {
             <li>Use your registered email address.</li>
             <li>Check password carefully before submitting.</li>
             <li>Use “Forgot Password” if needed.</li>
-          </ul>
+          </ul> */}
 
           <p className="text-xs text-yellow-300 mt-6 italic">
             “Your access is protected with end-to-end encryption.”
