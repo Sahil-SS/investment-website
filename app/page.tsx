@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-
 "use client";
 
 import { useState } from "react";
@@ -8,9 +6,19 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+type FormData = {
+  name: string;
+  phone: string;
+  email: string;
+  location: string;
+  password: string;
+  confirmPassword: string;
+  pan: string;
+};
+
 export default function SignUpPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     phone: "",
     email: "",
@@ -25,7 +33,7 @@ export default function SignUpPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const phoneRegex = /^[0-9]{10}$/;
@@ -126,8 +134,8 @@ export default function SignUpPage() {
           <Image
             src="/images/logo.png"
             alt="Company Logo"
-            width={2000}
-            height={2000}
+            width={200}
+            height={200}
             className="mb-4 drop-shadow-[0_0_25px_rgba(250,204,21,0.7)]"
           />
           <h2 className="text-2xl font-bold mb-3 text-yellow-300">
@@ -163,23 +171,27 @@ export default function SignUpPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {[
-              { name: "name", placeholder: "Full Name", type: "text" },
-              { name: "phone", placeholder: "Phone Number", type: "tel" },
-              { name: "email", placeholder: "Email Address", type: "email" },
-              { name: "pan", placeholder: "PAN Number", type: "text" },
-              { name: "location", placeholder: "Location", type: "text" },
-              { name: "password", placeholder: "Password", type: "password" },
-              {
-                name: "confirmPassword",
-                placeholder: "Confirm Password",
-                type: "password",
-              },
-            ].map((f) => (
+            {(
+              [
+                { name: "name", placeholder: "Full Name", type: "text" },
+                { name: "phone", placeholder: "Phone Number", type: "tel" },
+                { name: "email", placeholder: "Email Address", type: "email" },
+                { name: "pan", placeholder: "PAN Number", type: "text" },
+                { name: "location", placeholder: "Location", type: "text" },
+                { name: "password", placeholder: "Password", type: "password" },
+                {
+                  name: "confirmPassword",
+                  placeholder: "Confirm Password",
+                  type: "password",
+                },
+              ] as const
+            ).map((f) => (
               <input
                 key={f.name}
-                {...f}
-                value={(formData as any)[f.name]}
+                name={f.name}
+                type={f.type}
+                placeholder={f.placeholder}
+                value={formData[f.name]}
                 onChange={handleChange}
                 required
                 className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#db071d]/80 transition-all duration-300"
