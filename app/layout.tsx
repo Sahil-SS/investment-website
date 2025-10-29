@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "REO Investments",
+  title: "REO User Registration",
   description: "Investment portal",
 };
 

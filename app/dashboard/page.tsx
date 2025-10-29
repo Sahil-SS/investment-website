@@ -90,7 +90,7 @@ export default function UserDashboardPage() {
         type: "error",
         message: "📞 Phone number must be exactly 10 digits.",
       });
-      setTimeout(() => setPopup(null), 3000);
+      setTimeout(() => setPopup(null), 7000);
       setStatus("❌ Invalid phone number");
       return;
     }
@@ -100,7 +100,7 @@ export default function UserDashboardPage() {
         type: "error",
         message: "💳 Transaction ID must be exactly 12 digits.",
       });
-      setTimeout(() => setPopup(null), 3000);
+      setTimeout(() => setPopup(null), 7000);
       setStatus("❌ Invalid Transaction ID");
       return;
     }
@@ -169,42 +169,42 @@ export default function UserDashboardPage() {
         />
       </div>
 
-{/* NAVBAR */}
-<nav className="absolute top-0 left-0 w-full flex items-center justify-between px-10 h-24 z-20">
-  {/* LEFT SIDE — User Name */}
-  <div className="flex flex-col items-start">
-    <h1 className="text-2xl font-bold text-white drop-shadow-lg">
-      {user?.name}
-    </h1>
-    <p className="text-sm text-white/90">{user?.email}</p>
-    <p className="text-sm text-white/90">{user?.phone}</p>
-  </div>
+      {/* NAVBAR */}
+      <nav className="absolute top-0 left-0 w-full flex items-center justify-between px-10 h-24 z-20">
+        {/* LEFT SIDE — User Name */}
+        <div className="flex flex-col items-start">
+          <h1 className="text-2xl font-bold text-white drop-shadow-lg">
+            {user?.name}
+          </h1>
+          <p className="text-sm text-white/90">{user?.email}</p>
+          <p className="text-sm text-white/90">{user?.phone}</p>
+        </div>
 
-  {/* CENTER — Navigation Tabs */}
-  <div className="flex gap-4">
-    {["home", "profile", "loan"].map((tab) => (
-      <button
-        key={tab}
-        onClick={() => setActiveTab(tab as "home" | "profile" | "loan")}
-        className={`capitalize text-sm font-medium px-4 py-2 rounded-lg transition ${
-          activeTab === tab
-            ? "bg-white/20 text-white font-semibold"
-            : "text-white/90 hover:text-white"
-        }`}
-      >
-        {tab}
-      </button>
-    ))}
-  </div>
+        {/* CENTER — Navigation Tabs */}
+        <div className="flex gap-4">
+          {["home", "profile", "loan"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as "home" | "profile" | "loan")}
+              className={`capitalize text-sm font-medium px-4 py-2 rounded-lg transition ${
+                activeTab === tab
+                  ? "bg-white/20 text-white font-semibold"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-  {/* RIGHT SIDE — Logout Button */}
-  <button
-    onClick={handleLogout}
-    className="px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition"
-  >
-    Logout
-  </button>
-</nav>
+        {/* RIGHT SIDE — Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition"
+        >
+          Logout
+        </button>
+      </nav>
 
       {/* MAIN SECTION */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-10 mt-12">
@@ -235,23 +235,23 @@ export default function UserDashboardPage() {
                 <p className="text-sm text-white/80 mt-3 text-center">
                   Scan and pay securely using your preferred app.
                 </p>
-                <p className="mt-2 text-sm font-semibold text-yellow-300">
+                {/* <p className="mt-2 text-sm font-semibold text-yellow-300">
                   UPI ID:{" "}
                   <span className="text-white">
                     msthearchitizer.eazypay1@icici
                   </span>
-                </p>
+                </p> */}
                 <p className="text-sm text-white mt-3 text-center">
                   Once your payment is verified by our team, you’ll receive a
                   confirmation email.
                 </p>
-                <ul className="text-xs text-white/90 mt-3 space-y-1 list-disc list-inside text-left">
+                {/* <ul className="text-xs text-white/90 mt-3 space-y-1 list-disc list-inside text-left">
                   <li>Scan the QR using any UPI app.</li>
                   <li>Complete your payment securely.</li>
                   <li>
                     Fill the form with your payment details for verification.
                   </li>
-                </ul>
+                </ul> */}
               </div>
 
               {/* RIGHT FORM */}
@@ -269,7 +269,7 @@ export default function UserDashboardPage() {
                   </div>
 
                   <h3 className="text-2xl font-bold text-center text-[#db071d] mb-6">
-                    Your Investment 
+                    Your Investment
                   </h3>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -315,7 +315,7 @@ export default function UserDashboardPage() {
                       whileTap={{ scale: 0.95 }}
                       className="w-full py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:from-[#b10018] hover:to-[#db071d] transition"
                     >
-                      Submit Investment
+                      Submit
                     </motion.button>
 
                     {status && (
