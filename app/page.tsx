@@ -131,7 +131,7 @@ export default function SignUpPage() {
             className="mb-4 drop-shadow-[0_0_25px_rgba(250,204,21,0.7)]"
           />
           <h2 className="text-2xl font-bold mb-3 text-yellow-300">
-            Welcome to Registration
+            Online Registration
           </h2>
           {/* <p className="text-white/90 text-sm text-center max-w-sm mb-3">
             Please fill out all fields carefully. Ensure your PAN, email, and
