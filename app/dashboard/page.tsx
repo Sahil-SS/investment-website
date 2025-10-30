@@ -32,7 +32,6 @@ export default function UserDashboardPage() {
     amount: "",
     utr: "",
   });
-  const [status, setStatus] = useState("");
   const [popup, setPopup] = useState<{
     type: "success" | "error";
     message: string;
@@ -79,7 +78,6 @@ export default function UserDashboardPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus("Submitting...");
 
     const phonePattern = /^[0-9]{10}$/;
     const utrPattern = /^[0-9]{12}$/;
@@ -127,20 +125,11 @@ export default function UserDashboardPage() {
         message: "❌ Payment submission failed. Please try again.",
       });
     } else {
-      console.log("✅ Payment inserted successfully!");
-    }
-
-    if (error) {
-      setPopup({
-        type: "error",
-        message: "❌ Payment submission failed. Please try again.",
-      });
-    } else {
       setForm({ name: "", phone: "", amount: "", utr: "" });
       setPopup({
         type: "success",
         message:
-          "🎉 Your payment has been registered successfully! Once your payment is verified by our admin team, they will contact you. Your ID will be activated within 24–48 hours after verification.",
+          "🎉 Your payment has been registered successfully! Once your payment is verified by our admin team, they will contact you. Your ID will be activated within 24–48 hours after verification. If you wish to make another payment, please visit the Payments tab.",
       });
       triggerConfetti();
     }
@@ -167,23 +156,64 @@ export default function UserDashboardPage() {
         />
       </div>
 
-      {/* SIDEBAR */}
-      <aside className="relative z-20 w-60 sm:w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex flex-col justify-between py-8 px-4 sm:px-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">
+      {/* MOBILE NAVBAR */}
+      <nav className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-black/60 backdrop-blur-md border-b border-[#db071d]/60 px-4 py-3 sm:hidden">
+        {/* LEFT: User Info */}
+        <div className="flex flex-col text-left">
+          <span className="text-white font-semibold text-sm leading-tight">
             {user?.name}
-          </h1>
-          <p className="text-xs sm:text-sm text-white/80">{user?.email}</p>
-          <p className="text-xs sm:text-sm text-white/80 mb-6">{user?.phone}</p>
+          </span>
+          {/* <span className="text-white/80 text-xs leading-tight">
+            {user?.email}
+          </span>
+          <span className="text-white/80 text-xs leading-tight">
+            {user?.phone}
+          </span> */}
+        </div>
 
-          <div className="flex flex-col gap-2 sm:gap-3">
+        {/* CENTER: Nav Links */}
+        <div className="flex space-x-4">
+          {["home", "loan", "payment", "profile"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() =>
+                setActiveTab(tab as "home" | "loan" | "profile" | "payment")
+              }
+              className={`capitalize relative text-sm font-medium transition-all duration-300 ${
+                activeTab === tab
+                  ? "text-[#db071d]"
+                  : "text-white/90 hover:text-[#db071d]"
+              } after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[#FFD700] hover:after:w-full after:transition-all`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* RIGHT: Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="px-3 py-1.5 bg-[#db071d] text-white text-xs font-semibold rounded-lg hover:bg-[#b40618] transition"
+        >
+          Logout
+        </button>
+      </nav>
+
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden sm:flex relative z-20 w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex-col justify-between py-8 px-6">
+        <div>
+          <h1 className="text-2xl font-bold text-white mb-2">{user?.name}</h1>
+          <p className="text-sm text-white/80">{user?.email}</p>
+          <p className="text-sm text-white/80 mb-6">{user?.phone}</p>
+
+          <div className="flex flex-col gap-3">
             {["home", "profile", "payment", "loan"].map((tab) => (
               <button
                 key={tab}
                 onClick={() =>
                   setActiveTab(tab as "home" | "loan" | "profile" | "payment")
                 }
-                className={`capitalize cursor-pointer text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition text-left ${
+                className={`capitalize cursor-pointer text-sm font-medium py-2 px-4 rounded-lg transition text-left ${
                   activeTab === tab
                     ? "bg-[#db071d]/80 text-white"
                     : "text-white/80 hover:text-white hover:bg-white/10"
@@ -197,26 +227,26 @@ export default function UserDashboardPage() {
 
         <button
           onClick={handleLogout}
-          className="mt-10 w-full px-3 sm:px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition text-sm sm:text-base"
+          className="mt-10 w-full px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition text-base"
         >
           Logout
         </button>
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-white">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-white mt-28 sm:mt-0">
         {activeTab === "home" && (
-          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center">
             🏠 Your Dashboard, Coming Soon...
           </h2>
         )}
         {activeTab === "loan" && (
-          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center">
             💰 Loan Section, Coming Soon...
           </h2>
         )}
         {activeTab === "profile" && (
-          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center">
             👤 Profile Section, Coming Soon...
           </h2>
         )}
@@ -224,22 +254,18 @@ export default function UserDashboardPage() {
         {/* PAYMENT TAB */}
         {activeTab === "payment" && (
           <motion.div
-            className="relative z-10 flex flex-col md:flex-row w-full max-w-3xl md:max-w-4xl rounded-2xl shadow-[0_0_40px_-10px_rgba(219,7,29,0.8)] overflow-hidden bg-white/10 backdrop-blur-xl border border-[#db071d]/60"
+            className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl rounded-2xl shadow-[0_0_40px_-10px_rgba(219,7,29,0.8)] overflow-hidden bg-white/10 backdrop-blur-xl border border-[#db071d]/60"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             {/* LEFT SIDE */}
             <div className="md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#7a0010] p-6 sm:p-8 text-white">
-              <h2 className="text-xl sm:text-2xl font-bold mb-2 text-yellow-300">
+              <h2 className="text-2xl font-bold mb-2 text-yellow-300">
                 EAST INDIA PROMOTER
               </h2>
-              <p className="text-base sm:text-lg font-semibold mb-3">
-                THE ARCHITIZER
-              </p>
-              <h3 className="text-lg sm:text-xl font-semibold mb-3">
-                Scan & Pay
-              </h3>
+              <p className="text-lg font-semibold mb-3">THE ARCHITIZER</p>
+              <h3 className="text-xl font-semibold mb-3">Scan & Pay</h3>
               <div className="bg-white p-3 rounded-xl shadow-md">
                 <Image
                   src="/images/qr.jpg"
@@ -249,10 +275,10 @@ export default function UserDashboardPage() {
                   className="rounded-md"
                 />
               </div>
-              <p className="text-xs sm:text-sm text-white/80 mt-3 text-center px-3">
+              <p className="text-sm text-white/80 mt-3 text-center px-3">
                 Scan and pay securely using your preferred app.
               </p>
-              <p className="text-xs sm:text-sm text-white mt-3 text-center px-3">
+              <p className="text-sm text-white mt-3 text-center px-3">
                 Once your payment is verified, our team will contact you.
               </p>
             </div>
@@ -270,7 +296,7 @@ export default function UserDashboardPage() {
                   />
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-bold text-center text-[#db071d] mb-6">
+                <h3 className="text-2xl font-bold text-center text-[#db071d] mb-6">
                   Your Investment
                 </h3>
 
@@ -311,7 +337,7 @@ export default function UserDashboardPage() {
                     type="submit"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition text-sm sm:text-base"
+                    className="w-full py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition text-base"
                   >
                     Submit
                   </motion.button>
