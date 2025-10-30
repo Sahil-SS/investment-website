@@ -62,7 +62,7 @@ export default function SignInPage() {
           {/* 🏢 Company Logo */}
           <div className="flex justify-center mb-4 w-40 sm:w-52 md:w-72">
             <Image
-              src="/images/logo.png"
+              src="/images/logo_white.png"
               alt="Company Logo"
               width={2000}
               height={1000}

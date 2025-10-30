@@ -124,10 +124,10 @@ export default function SignUpPage() {
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#7a0010] p-6 sm:p-8 text-white text-center">
           <div className="flex justify-center mb-4 w-40 sm:w-52 md:w-72">
             <Image
-              src="/images/logo.png"
+              src="/images/logo_white.png"
               alt="Company Logo"
-              width={5000}
-              height={5000}
+              width={2000}
+              height={2000}
               className="w-full drop-shadow-[0_0_25px_rgba(250,204,21,0.7)] hover:scale-105 transition-transform duration-300"
             />
           </div>

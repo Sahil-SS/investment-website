@@ -4,7 +4,9 @@ import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import LoanComingSoonCard from "@/components/LoanComingSoonCard";
 import Image from "next/image";
+import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
 
 type SupabaseUser = {
   name: string;
@@ -22,8 +24,8 @@ type FormData = {
 export default function UserDashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    "home" | "profile" | "loan" | "payment"
-  >("payment");
+    "home" | "profile" | "loan" | "investment" | "myteam"
+  >("investment");
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<FormData>({
@@ -128,9 +130,17 @@ export default function UserDashboardPage() {
       setForm({ name: "", phone: "", amount: "", utr: "" });
       setPopup({
         type: "success",
-        message:
-          "🎉 Your payment has been registered successfully! Once your payment is verified by our admin team, they will contact you. Your ID will be activated within 24–48 hours after verification. If you wish to make another payment, please visit the Payments tab.",
+        message: `🚀 Welcome to REO!
+
+We have successfully received your payment.
+
+Our admin team is now verifying the transaction, which typically takes up to 72 hours. You will receive a confirmation email once your account has been activated.
+
+Need to make an additional payment? Simply visit the Payment section on your dashboard.
+
+Thank you for choosing REO.`,
       });
+
       triggerConfetti();
     }
   };
@@ -163,21 +173,17 @@ export default function UserDashboardPage() {
           <span className="text-white font-semibold text-sm leading-tight">
             {user?.name}
           </span>
-          {/* <span className="text-white/80 text-xs leading-tight">
-            {user?.email}
-          </span>
-          <span className="text-white/80 text-xs leading-tight">
-            {user?.phone}
-          </span> */}
         </div>
 
         {/* CENTER: Nav Links */}
         <div className="flex space-x-4">
-          {["home", "loan", "payment", "profile"].map((tab) => (
+          {["home", "loan", "investment", "profile", "myteam"].map((tab) => (
             <button
               key={tab}
               onClick={() =>
-                setActiveTab(tab as "home" | "loan" | "profile" | "payment")
+                setActiveTab(
+                  tab as "home" | "loan" | "profile" | "investment" | "myteam"
+                )
               }
               className={`capitalize relative text-sm font-medium transition-all duration-300 ${
                 activeTab === tab
@@ -185,7 +191,7 @@ export default function UserDashboardPage() {
                   : "text-white/90 hover:text-[#db071d]"
               } after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[#FFD700] hover:after:w-full after:transition-all`}
             >
-              {tab}
+              {tab === "myteam" ? "My Team" : tab}
             </button>
           ))}
         </div>
@@ -199,39 +205,64 @@ export default function UserDashboardPage() {
         </button>
       </nav>
 
-      {/* DESKTOP SIDEBAR */}
-      <aside className="hidden sm:flex relative z-20 w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex-col justify-between py-8 px-6">
-        <div>
-          <h1 className="text-2xl font-bold text-white mb-2">{user?.name}</h1>
-          <p className="text-sm text-white/80">{user?.email}</p>
-          <p className="text-sm text-white/80 mb-6">{user?.phone}</p>
+{/* DESKTOP SIDEBAR */}
+<aside className="hidden sm:flex relative z-20 w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex-col justify-between py-8 px-6">
+  {/* Top Section */}
+  <div>
+    <h1 className="text-2xl font-bold text-white mb-2">{user?.name}</h1>
+    <p className="text-sm text-white/80">{user?.email}</p>
+    <p className="text-sm text-white/80 mb-6">{user?.phone}</p>
 
-          <div className="flex flex-col gap-3">
-            {["home", "profile", "payment", "loan"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() =>
-                  setActiveTab(tab as "home" | "loan" | "profile" | "payment")
-                }
-                className={`capitalize cursor-pointer text-sm font-medium py-2 px-4 rounded-lg transition text-left ${
-                  activeTab === tab
-                    ? "bg-[#db071d]/80 text-white"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-
+    {/* Navigation */}
+    <div className="flex flex-col gap-3">
+      {["home", "profile", "investment", "loan", "myteam"].map((tab) => (
         <button
-          onClick={handleLogout}
-          className="mt-10 w-full px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition text-base"
+          key={tab}
+          onClick={() =>
+            setActiveTab(
+              tab as "home" | "loan" | "profile" | "investment" | "myteam"
+            )
+          }
+          className={`capitalize cursor-pointer text-sm font-medium py-2 px-4 rounded-lg transition text-left ${
+            activeTab === tab
+              ? "bg-[#db071d]/80 text-white"
+              : "text-white/80 hover:text-white hover:bg-white/10"
+          }`}
         >
-          Logout
+          {tab === "myteam" ? "My Team" : tab}
         </button>
-      </aside>
+      ))}
+    </div>
+  </div>
+
+  {/* Bottom Section (Follow + Logout) */}
+  <div className="flex flex-col items-center gap-4 pt-6 border-t border-white/10">
+    {/* Social Icons */}
+    <div className="flex gap-4">
+      <a
+        href="https://wa.me/+918436969369"
+        target="_blank"
+        className="p-3 bg-[#25D366] text-white rounded-full hover:scale-110 transition-transform shadow-md"
+      >
+        <FaWhatsapp className="text-lg" />
+      </a>
+      <a
+        href="mailto:support@reodevelop.com"
+        className="p-3 bg-[#db071d] text-white rounded-full hover:scale-110 transition-transform shadow-md"
+      >
+        <FaEnvelope className="text-lg" />
+      </a>
+    </div>
+
+    {/* Logout Button */}
+    <button
+      onClick={handleLogout}
+      className="w-full px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition text-base"
+    >
+      Logout
+    </button>
+  </div>
+</aside>
 
       {/* MAIN CONTENT */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-white mt-28 sm:mt-0">
@@ -241,18 +272,24 @@ export default function UserDashboardPage() {
           </h2>
         )}
         {activeTab === "loan" && (
-          <h2 className="text-2xl sm:text-3xl font-bold text-center">
-            💰 Loan Section, Coming Soon...
-          </h2>
+          <div className="flex justify-center items-center min-h-[80vh]">
+            <LoanComingSoonCard />
+          </div>
         )}
+
         {activeTab === "profile" && (
           <h2 className="text-2xl sm:text-3xl font-bold text-center">
             👤 Profile Section, Coming Soon...
           </h2>
         )}
+        {activeTab === "myteam" && (
+          <h2 className="text-2xl sm:text-3xl font-bold text-center">
+            🤝 My Team Section, Coming Soon...
+          </h2>
+        )}
 
-        {/* PAYMENT TAB */}
-        {activeTab === "payment" && (
+        {/* INVESTMENT TAB */}
+        {activeTab === "investment" && (
           <motion.div
             className="relative z-10 flex flex-col md:flex-row w-full max-w-4xl rounded-2xl shadow-[0_0_40px_-10px_rgba(219,7,29,0.8)] overflow-hidden bg-white/10 backdrop-blur-xl border border-[#db071d]/60"
             initial={{ opacity: 0, y: 40 }}
@@ -265,11 +302,11 @@ export default function UserDashboardPage() {
                 EAST INDIA PROMOTER
               </h2>
               <p className="text-lg font-semibold mb-3">THE ARCHITIZER</p>
-              <h3 className="text-xl font-semibold mb-3">Scan & Pay</h3>
+              <h3 className="text-xl font-semibold mb-3">Scan & Invest</h3>
               <div className="bg-white p-3 rounded-xl shadow-md">
                 <Image
                   src="/images/qr.jpg"
-                  alt="GPay QR"
+                  alt="Investment QR"
                   width={160}
                   height={160}
                   className="rounded-md"
@@ -288,7 +325,7 @@ export default function UserDashboardPage() {
               <div className="p-6 sm:p-8">
                 <div className="flex justify-center mb-4">
                   <Image
-                    src="/images/logo.png"
+                    src="/images/logo_red.png"
                     alt="Logo"
                     width={220}
                     height={180}
@@ -365,9 +402,10 @@ export default function UserDashboardPage() {
                 popup.type === "success" ? "bg-green-600" : "bg-red-600"
               } text-white`}
             >
-              <h3 className="text-base sm:text-lg font-semibold mb-2">
+              <p className="whitespace-pre-line text-center leading-relaxed text-white">
                 {popup.message}
-              </h3>
+              </p>
+
               <button
                 onClick={() => {
                   setPopup(null);
