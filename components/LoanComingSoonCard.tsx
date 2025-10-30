@@ -63,8 +63,8 @@ const LoanComingSoonCard = () => {
             <Image
               src="/images/people-placeholder.png"
               alt="People waiting"
-              width={900}
-              height={700}
+              width={600}
+              height={400}
               className="object-contain w-4/5 max-w-[400px] mx-auto"
             />
           </motion.div>
