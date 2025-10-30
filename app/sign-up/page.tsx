@@ -101,7 +101,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden px-4 sm:px-8">
       {/* 🏙 Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -113,6 +113,7 @@ export default function SignUpPage() {
         />
       </div>
 
+      {/* MAIN CARD */}
       <motion.div
         className="relative z-10 flex flex-col md:flex-row w-full max-w-5xl rounded-2xl shadow-[0_0_50px_-10px_rgba(219,7,29,0.8)] overflow-hidden bg-white/10 backdrop-blur-xl border border-[#db071d]/60"
         initial={{ opacity: 0, y: 40 }}
@@ -120,36 +121,28 @@ export default function SignUpPage() {
         transition={{ duration: 0.8 }}
       >
         {/* LEFT SIDE */}
-        <div className="md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#7a0010] p-8 text-white">
-          <Image
-            src="/images/logo.png"
-            alt="Company Logo"
-            width={2000}
-            height={2000}
-            className="mb-4 drop-shadow-[0_0_25px_rgba(250,204,21,0.7)]"
-          />
-          <h2 className="text-2xl font-bold mb-3 text-yellow-300">
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#7a0010] p-6 sm:p-8 text-white text-center">
+          <div className="flex justify-center mb-4 w-40 sm:w-52 md:w-72">
+            <Image
+              src="/images/logo.png"
+              alt="Company Logo"
+              width={2000}
+              height={2000}
+              className="w-full drop-shadow-[0_0_25px_rgba(250,204,21,0.7)] hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+          <h2 className="text-2xl font-bold mb-2 text-yellow-300">
             Welcome to Registration
           </h2>
-          {/* <p className="text-white/90 text-sm text-center max-w-sm mb-3">
-            Please fill out all fields carefully. Ensure your PAN, email, and
-            phone number are accurate — duplicate entries will not be accepted.
-          </p>
 
-          <ul className="list-disc list-inside text-white/80 text-sm space-y-1 text-left max-w-sm">
-            <li>Use your official name as per ID proof.</li>
-            <li>Enter a valid 10-digit phone number.</li>
-            <li>Use correct PAN format (ABCDE1234F).</li>
-            <li>Choose a strong password (min 6 characters).</li>
-          </ul> */}
-
-          <p className="text-xs text-yellow-300 mt-6 text-center italic">
+          <p className="text-xs sm:text-sm text-yellow-300 mt-4 italic">
             “Your details are safe and encrypted with us.”
           </p>
         </div>
 
         {/* RIGHT SIDE: FORM */}
-        <div className="md:w-1/2 bg-white p-8 text-gray-800 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 bg-white p-6 sm:p-8 text-gray-800 flex flex-col justify-center">
           <h1 className="text-2xl font-bold text-center text-[#db071d] mb-6">
             Registration
           </h1>
@@ -194,12 +187,12 @@ export default function SignUpPage() {
               {loading ? "Creating..." : "Sign Up"}
             </motion.button>
 
-            <p className="text-center text-sm text-gray-600 mt-3">
+            <p
+              onClick={() => router.push("/sign-in")}
+              className="text-center text-sm text-gray-600 mt-3 cursor-pointer"
+            >
               Already have an account?{" "}
-              <span
-                onClick={() => router.push("/sign-in")}
-                className="text-[#db071d] font-semibold cursor-pointer hover:underline"
-              >
+              <span className="text-[#db071d] font-semibold cursor-pointer hover:underline">
                 Log In
               </span>
             </p>
