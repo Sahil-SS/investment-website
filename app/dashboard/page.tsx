@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import LoanComingSoonCard from "@/components/LoanComingSoonCard";
 import Image from "next/image";
-import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
+// import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
 
 type SupabaseUser = {
   name: string;
@@ -24,7 +24,7 @@ type FormData = {
 export default function UserDashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    "home" | "profile" | "loan" | "investment" | "myteam"
+    "home" | "profile" | "loan" | "investment" | "myteam" | "support" | "myrent"
   >("investment");
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -136,7 +136,7 @@ We have successfully received your payment.
 
 Our admin team is now verifying the transaction, which typically takes up to 72 hours. You will receive a confirmation email once your account has been activated.
 
-Need to make an additional payment? Simply visit the Payment section on your dashboard.
+Need to make an additional payment? Simply visit the Investment section on your dashboard.
 
 Thank you for choosing REO.`,
       });
@@ -177,21 +177,42 @@ Thank you for choosing REO.`,
 
         {/* CENTER: Nav Links */}
         <div className="flex space-x-4">
-          {["home", "loan", "investment", "profile", "myteam"].map((tab) => (
+          {[
+            "home",
+            "loan",
+            "investment",
+            "profile",
+            "myteam",
+            "support",
+            "myrent",
+          ].map((tab) => (
             <button
               key={tab}
               onClick={() =>
                 setActiveTab(
-                  tab as "home" | "loan" | "profile" | "investment" | "myteam"
+                  tab as
+                    | "home"
+                    | "loan"
+                    | "profile"
+                    | "investment"
+                    | "myteam"
+                    | "support"
+                    | "myrent"
                 )
               }
-              className={`capitalize relative text-sm font-medium transition-all duration-300 ${
+              className={`capitalize relative text-xs font-medium transition-all duration-300 ${
                 activeTab === tab
                   ? "text-[#db071d]"
                   : "text-white/90 hover:text-[#db071d]"
               } after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[#FFD700] hover:after:w-full after:transition-all`}
             >
-              {tab === "myteam" ? "My Team" : tab}
+              {tab === "myteam"
+                ? "My Team"
+                : tab === "myrent"
+                ? "My Rent"
+                : tab === "support"
+                ? "Support"
+                : tab}
             </button>
           ))}
         </div>
@@ -199,73 +220,102 @@ Thank you for choosing REO.`,
         {/* RIGHT: Logout Button */}
         <button
           onClick={handleLogout}
-          className="px-3 py-1.5 bg-[#db071d] text-white text-xs font-semibold rounded-lg hover:bg-[#b40618] transition"
+          className="px-3 py-1 bg-[#db071d] text-white text-xs font-semibold rounded-lg hover:bg-[#b40618] transition"
         >
           Logout
         </button>
       </nav>
 
-{/* DESKTOP SIDEBAR */}
-<aside className="hidden sm:flex relative z-20 w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex-col justify-between py-8 px-6">
-  {/* Top Section */}
-  <div>
-    <h1 className="text-2xl font-bold text-white mb-2">{user?.name}</h1>
-    <p className="text-sm text-white/80">{user?.email}</p>
-    <p className="text-sm text-white/80 mb-6">{user?.phone}</p>
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden sm:flex relative z-20 w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex-col justify-between py-8 px-6">
+        {/* Top Section */}
+        <div>
+          {/* Company Logo */}
+          <div className="flex justify-center mb-6">
+            <Image
+              src="/images/logo_white.png" // 🟢 replace with your logo path
+              alt="Company Logo"
+              width={120} // adjust size as needed
+              height={120}
+              className="object-contain"
+              priority
+            />
+          </div>
 
-    {/* Navigation */}
-    <div className="flex flex-col gap-3">
-      {["home", "profile", "investment", "loan", "myteam"].map((tab) => (
-        <button
-          key={tab}
-          onClick={() =>
-            setActiveTab(
-              tab as "home" | "loan" | "profile" | "investment" | "myteam"
-            )
-          }
-          className={`capitalize cursor-pointer text-sm font-medium py-2 px-4 rounded-lg transition text-left ${
-            activeTab === tab
-              ? "bg-[#db071d]/80 text-white"
-              : "text-white/80 hover:text-white hover:bg-white/10"
-          }`}
-        >
-          {tab === "myteam" ? "My Team" : tab}
-        </button>
-      ))}
-    </div>
-  </div>
+          <h1 className="text-2xl font-bold text-white mb-2 text-center">
+            {user?.name}
+          </h1>
+          <p className="text-sm text-white/80 text-center">{user?.email}</p>
+          <p className="text-sm text-white/80 mb-6 text-center">
+            {user?.phone}
+          </p>
 
-  {/* Bottom Section (Follow + Logout) */}
-  <div className="flex flex-col items-center gap-4 pt-6 border-t border-white/10">
-    {/* Social Icons */}
-    <div className="flex gap-4">
-      <a
-        href="https://wa.me/+918436969369"
-        target="_blank"
-        className="p-3 bg-[#25D366] text-white rounded-full hover:scale-110 transition-transform shadow-md"
-      >
-        <FaWhatsapp className="text-lg" />
-      </a>
-      <a
-        href="mailto:support@reodevelop.com"
-        className="p-3 bg-[#db071d] text-white rounded-full hover:scale-110 transition-transform shadow-md"
-      >
-        <FaEnvelope className="text-lg" />
-      </a>
-    </div>
+          {/* Navigation */}
+          <div className="flex flex-col gap-3">
+            {[
+              "home",
+              "profile",
+              "investment",
+              "loan",
+              "myteam",
+              "support",
+              "myrent",
+            ].map((tab) => (
+              <button
+                key={tab}
+                onClick={() =>
+                  setActiveTab(
+                    tab as
+                      | "home"
+                      | "loan"
+                      | "profile"
+                      | "investment"
+                      | "myteam"
+                      | "support"
+                      | "myrent"
+                  )
+                }
+                className={`capitalize cursor-pointer text-sm font-medium py-2 px-4 rounded-lg transition text-left ${
+                  activeTab === tab
+                    ? "bg-[#db071d]/80 text-white"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {tab === "myteam"
+                  ? "My Team"
+                  : tab === "myrent"
+                  ? "My Rent"
+                  : tab === "support"
+                  ? "Support"
+                  : tab}
+              </button>
+            ))}
+          </div>
+        </div>
 
-    {/* Logout Button */}
-    <button
-      onClick={handleLogout}
-      className="w-full px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition text-base"
-    >
-      Logout
-    </button>
-  </div>
-</aside>
+        {/* Bottom Section (Logout) */}
+        <div className="flex flex-col items-center gap-4 pt-6 border-t border-white/10">
+          <button
+            onClick={handleLogout}
+            className="w-full px-4 py-2 bg-[#db071d]/80 hover:bg-[#b40618]/90 text-white rounded-lg transition text-base"
+          >
+            Logout
+          </button>
+        </div>
+      </aside>
 
       {/* MAIN CONTENT */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-white mt-28 sm:mt-0">
+        {/* ✅ Trusted Seller Badge */}
+        <Image
+          src="/images/trust_logo.png"
+          alt="Trusted Seller"
+          width={150}
+          height={150}
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 object-contain"
+          priority
+        />
+
         {activeTab === "home" && (
           <h2 className="text-2xl sm:text-3xl font-bold text-center">
             🏠 Your Dashboard, Coming Soon...
@@ -276,7 +326,6 @@ Thank you for choosing REO.`,
             <LoanComingSoonCard />
           </div>
         )}
-
         {activeTab === "profile" && (
           <h2 className="text-2xl sm:text-3xl font-bold text-center">
             👤 Profile Section, Coming Soon...
@@ -285,6 +334,73 @@ Thank you for choosing REO.`,
         {activeTab === "myteam" && (
           <h2 className="text-2xl sm:text-3xl font-bold text-center">
             🤝 My Team Section, Coming Soon...
+          </h2>
+        )}
+        {activeTab === "support" && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex justify-center items-center min-h-[70vh]"
+          >
+            <div className="bg-white rounded-3xl shadow-2xl border border-[#db071d]/30 p-8 w-full max-w-md text-center">
+              <Image
+                src="/images/logo_red.png"
+                alt="Company Logo"
+                width={160}
+                height={60}
+                className="mx-auto mb-4 object-contain"
+              />
+
+              <h2 className="text-2xl font-bold text-[#db071d] mb-2">
+                Reach Out to Us
+              </h2>
+              <p className="text-gray-600 mb-4 text-sm">
+                For any queries or support, feel free to contact us anytime.
+              </p>
+
+              <a
+                href="mailto:support@reodevelop.com"
+                className="text-[#db071d] font-semibold hover:underline mb-6 inline-block"
+              >
+                support@reodevelop.com
+              </a>
+
+              <form
+                action="https://api.web3forms.com/submit"
+                method="POST"
+                className="space-y-4"
+              >
+                <input
+                  type="hidden"
+                  name="access_key"
+                  value="2756ba83-599a-443a-b5a1-1871d615f0db"
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[#db071d]/70 focus:outline-none"
+                />
+
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition text-base"
+                >
+                  Send
+                </motion.button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === "myrent" && (
+          <h2 className="text-2xl sm:text-3xl font-bold text-center">
+            💼 My Rent Section, Coming Soon...
           </h2>
         )}
 

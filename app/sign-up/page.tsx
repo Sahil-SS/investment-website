@@ -133,7 +133,7 @@ export default function SignUpPage() {
           </div>
 
           <h2 className="text-2xl font-bold mb-2 text-yellow-300">
-            Welcome to Registration
+            Online Registration
           </h2>
 
           <p className="text-xs sm:text-sm text-yellow-300 mt-4 italic">
@@ -144,7 +144,7 @@ export default function SignUpPage() {
         {/* RIGHT SIDE: FORM */}
         <div className="w-full md:w-1/2 bg-white p-6 sm:p-8 text-gray-800 flex flex-col justify-center">
           <h1 className="text-2xl font-bold text-center text-[#db071d] mb-6">
-            Registration
+            Registration Form
           </h1>
 
           {success && (
