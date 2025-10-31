@@ -360,10 +360,10 @@ Thank you for choosing REO.`,
               </p>
 
               <a
-                href="mailto:support@reodevelop.com"
+                href="mailto:Support@reodevelop.com"
                 className="text-[#db071d] font-semibold hover:underline mb-6 inline-block"
               >
-                support@reodevelop.com
+                Support@reodevelop.com
               </a>
 
               <form

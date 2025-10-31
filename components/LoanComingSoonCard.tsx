@@ -39,12 +39,13 @@ const LoanComingSoonCard = () => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="bg-white/10 backdrop-blur-lg border border-[#db071d]/40 rounded-3xl shadow-2xl overflow-hidden w-full max-w-6xl mx-auto text-white"
+      className="bg-white/10 backdrop-blur-lg border border-[#db071d]/40 rounded-3xl shadow-2xl overflow-hidden w-full max-w-5xl mx-auto text-white" 
+      // 🔻 reduced from max-w-6xl to max-w-5xl for a smaller card width
     >
-      <div className="flex flex-col md:flex-row min-h-[700px]">
+      <div className="flex flex-col md:flex-row min-h-[600px]">
+        {/* 🔻 reduced min-h from 700px to 600px for smaller height */}
         {/* LEFT - RED SIDE */}
         <div className="md:w-1/2 flex flex-col justify-between bg-[#db071d] p-10 md:p-14 text-center relative">
-          {/* Logo */}
           <div className="w-40 md:w-52 mx-auto">
             <Image
               src="/images/logo_white.png"
@@ -55,7 +56,6 @@ const LoanComingSoonCard = () => {
             />
           </div>
 
-          {/* People waiting image */}
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
@@ -76,7 +76,6 @@ const LoanComingSoonCard = () => {
 
         {/* RIGHT - WHITE SIDE */}
         <div className="md:w-1/2 bg-white flex flex-col justify-center items-center text-center p-10 relative">
-          {/* COMING SOON text (smaller now) */}
           <motion.h1
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -86,7 +85,6 @@ const LoanComingSoonCard = () => {
             COMING&nbsp;SOON!
           </motion.h1>
 
-          {/* Phone Image */}
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
@@ -100,7 +98,6 @@ const LoanComingSoonCard = () => {
             />
           </motion.div>
 
-          {/* Launch Date - Signature Red */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -110,7 +107,6 @@ const LoanComingSoonCard = () => {
             Launching on <span className="text-yellow-300 font-bold">January 15, 2026</span>
           </motion.div>
 
-          {/* Countdown Timer */}
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
             {Object.entries(timer).map(([unit, value]) => (
               <div
