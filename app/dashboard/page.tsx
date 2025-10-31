@@ -307,14 +307,17 @@ Thank you for choosing REO.`,
       {/* MAIN CONTENT */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-white mt-28 sm:mt-0">
         {/* ✅ Trusted Seller Badge */}
-        <Image
-          src="/images/trust_logo.png"
-          alt="Trusted Seller"
-          width={150}
-          height={150}
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 object-contain"
-          priority
-        />
+        {/* ✅ Trusted Seller Badge (always visible, fixed above everything) */}
+        <div className="fixed top-20 right-3 sm:top-6 sm:right-6 z-[60]">
+          <Image
+            src="/images/trust_logo.png"
+            alt="Trusted Seller"
+            width={120}
+            height={120}
+            className="object-contain"
+            priority
+          />
+        </div>
 
         {activeTab === "home" && (
           <h2 className="text-2xl sm:text-3xl font-bold text-center">
@@ -343,7 +346,7 @@ Thank you for choosing REO.`,
             transition={{ duration: 0.8 }}
             className="flex justify-center items-center min-h-[70vh]"
           >
-            <div className="bg-white rounded-3xl shadow-2xl border border-[#db071d]/30 p-8 w-full max-w-md text-center">
+            <div className="bg-white rounded-3xl shadow-2xl border border-[#db071d]/30 p-7 w-full max-w-md text-center">
               <Image
                 src="/images/logo_red.png"
                 alt="Company Logo"
@@ -355,18 +358,18 @@ Thank you for choosing REO.`,
               <h2 className="text-2xl font-bold text-[#db071d] mb-2">
                 Reach Out to Us
               </h2>
-              <p className="text-gray-600 mb-4 text-sm">
+              <p className="text-gray-600 mb-2 text-sm">
                 For any queries or support, feel free to contact us anytime.
               </p>
 
               <a
-                href="mailto:Support@reodevelop.com"
-                className="text-[#db071d] font-semibold hover:underline mb-6 inline-block"
+                href="mailto:reoheadquarter@gmail.com"
+                className="text-[#db071d] font-semibold hover:underline mb-1 inline-block text-xl"
               >
-                Support@reodevelop.com
+                reoheadquarter@gmail.com
               </a>
 
-              <form
+              {/* <form
                 action="https://api.web3forms.com/submit"
                 method="POST"
                 className="space-y-4"
@@ -393,7 +396,7 @@ Thank you for choosing REO.`,
                 >
                   Send
                 </motion.button>
-              </form>
+              </form> */}
             </div>
           </motion.div>
         )}
@@ -413,47 +416,53 @@ Thank you for choosing REO.`,
             transition={{ duration: 0.8 }}
           >
             {/* LEFT SIDE */}
-            <div className="md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#7a0010] p-6 sm:p-8 text-white">
-              <h2 className="text-2xl font-bold mb-2 text-yellow-300">
+            <div className="md:w-1/2 flex flex-col items-center justify-center bg-gradient-to-b from-[#db071d] to-[#7a0010] p-5 sm:p-6 text-white">
+              <h2 className="text-xl sm:text-2xl font-bold mb-1 text-yellow-300 text-center">
                 EAST INDIA PROMOTER
               </h2>
-              <p className="text-lg font-semibold mb-3">THE ARCHITIZER</p>
-              <h3 className="text-xl font-semibold mb-3">Scan & Invest</h3>
-              <div className="bg-white p-3 rounded-xl shadow-md">
+              <p className="text-base sm:text-lg font-semibold mb-2">
+                THE ARCHITIZER
+              </p>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2">
+                Scan & Invest
+              </h3>
+
+              <div className="bg-white p-2.5 sm:p-3 rounded-xl shadow-md">
                 <Image
                   src="/images/qr.jpg"
                   alt="Investment QR"
-                  width={160}
-                  height={160}
-                  className="rounded-md"
+                  width={140}
+                  height={140}
+                  className="rounded-md w-32 sm:w-40 h-auto"
                 />
               </div>
-              <p className="text-sm text-white/80 mt-3 text-center px-3">
-                Scan and pay securely using your preferred app.
-              </p>
-              <p className="text-sm text-white mt-3 text-center px-3">
+
+              <p className="text-xs sm:text-sm text-white mt-2 text-center px-2">
                 Once your payment is verified, our team will contact you.
               </p>
             </div>
 
             {/* RIGHT FORM */}
             <div className="md:w-1/2 bg-white text-gray-800 flex flex-col justify-start rounded-r-xl overflow-hidden">
-              <div className="p-6 sm:p-8">
-                <div className="flex justify-center mb-4">
+              <div className="p-5 sm:p-6 md:p-8">
+                <div className="flex justify-center mb-3 sm:mb-4">
                   <Image
                     src="/images/logo_red.png"
                     alt="Logo"
-                    width={220}
-                    height={180}
+                    width={130}
+                    height={130}
                     className="object-contain"
                   />
                 </div>
 
-                <h3 className="text-2xl font-bold text-center text-[#db071d] mb-6">
-                  Your Investment
+                <h3 className="text-xl sm:text-2xl font-bold text-center text-[#db071d] mb-4 sm:mb-5">
+                  Investment Details
                 </h3>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-3 sm:space-y-4"
+                >
                   {(
                     [
                       { name: "name", placeholder: "Full Name", type: "text" },
@@ -481,7 +490,7 @@ Thank you for choosing REO.`,
                       type={field.type}
                       value={form[field.name]}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#db071d]/80 transition-all duration-300"
+                      className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#db071d]/80 transition-all duration-300"
                       required
                     />
                   ))}
@@ -490,7 +499,7 @@ Thank you for choosing REO.`,
                     type="submit"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition text-base"
+                    className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition text-sm sm:text-base"
                   >
                     Submit
                   </motion.button>

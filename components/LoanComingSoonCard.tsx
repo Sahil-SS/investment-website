@@ -26,7 +26,9 @@ const LoanComingSoonCard = () => {
 
       setTimer({
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        hours: Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((distance % (1000 * 60)) / 1000),
       });
@@ -39,10 +41,10 @@ const LoanComingSoonCard = () => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="bg-white/10 backdrop-blur-lg border border-[#db071d]/40 rounded-3xl shadow-2xl overflow-hidden w-full max-w-5xl mx-auto text-white" 
+      className="bg-white/10 backdrop-blur-lg border border-[#db071d]/40 rounded-3xl shadow-2xl overflow-hidden w-full max-w-4xl mx-auto text-white"
       // 🔻 reduced from max-w-6xl to max-w-5xl for a smaller card width
     >
-      <div className="flex flex-col md:flex-row min-h-[600px]">
+      <div className="flex flex-col md:flex-row min-h-[400px]">
         {/* 🔻 reduced min-h from 700px to 600px for smaller height */}
         {/* LEFT - RED SIDE */}
         <div className="md:w-1/2 flex flex-col justify-between bg-[#db071d] p-10 md:p-14 text-center relative">
@@ -104,7 +106,8 @@ const LoanComingSoonCard = () => {
             transition={{ duration: 0.8 }}
             className="mt-10 px-8 py-3 rounded-full bg-[#db071d] text-white text-lg md:text-xl font-semibold shadow-md"
           >
-            Launching on <span className="text-yellow-300 font-bold">January 15, 2026</span>
+            Launching on{" "}
+            <span className="text-yellow-300 font-bold">January 15, 2026</span>
           </motion.div>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
