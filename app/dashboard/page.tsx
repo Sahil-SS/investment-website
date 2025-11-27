@@ -18,7 +18,7 @@ type FormData = {
   phone: string;
   amount: string;
   utr: string;
-  planType: string; // ⬅ added
+  planType: string;
 };
 
 export default function UserDashboardPage() {
@@ -33,7 +33,7 @@ export default function UserDashboardPage() {
     phone: "",
     amount: "",
     utr: "",
-    planType: "Rental", // ⬅ added
+    planType: "", // ⬅ no default selected
   });
   const [popup, setPopup] = useState<{
     type: "success" | "error";
@@ -103,6 +103,14 @@ export default function UserDashboardPage() {
       return;
     }
 
+    if (!form.planType) {
+      setPopup({
+        type: "error",
+        message: "⚠ Please select a plan type before submitting.",
+      });
+      return;
+    }
+
     const {
       data: { user: currentUser },
     } = await supabase.auth.getUser();
@@ -120,7 +128,7 @@ export default function UserDashboardPage() {
         utr: form.utr,
         email: user.email,
         user_id: currentUser.id,
-        plan_type: form.planType, // ⬅ added to DB
+        plan_type: form.planType, // ⬅ save in DB
       },
     ]);
 
@@ -136,7 +144,7 @@ export default function UserDashboardPage() {
         phone: "",
         amount: "",
         utr: "",
-        planType: "Rental", // ⬅ reset
+        planType: "", // ⬅ reset
       });
 
       setPopup({
@@ -467,19 +475,19 @@ Thank you for choosing REO.`,
                     />
                   ))}
 
-                  {/* NEW SELECT FIELD */}
-                  <div className="flex gap-3 justify-center">
+                  {/* PLAN SELECTOR BUTTONS */}
+                  <div className="flex gap-3 justify-center pt-1">
                     {["Rental", "One-time"].map((plan) => (
                       <button
                         key={plan}
                         type="button"
                         onClick={() => setForm({ ...form, planType: plan })}
                         className={`flex-1 py-2.5 rounded-lg border text-sm font-semibold transition-all duration-300
-                                  ${
-                                    form.planType === plan
-                                      ? "bg-[#db071d] text-white border-[#db071d]"
-                                      : "bg-white text-gray-700 border-gray-300 hover:border-[#db071d]/60"
-                                  }`}
+                          ${
+                            form.planType === plan
+                              ? "bg-[#db071d] text-white border-[#db071d]"
+                              : "bg-white text-gray-700 border-gray-300 hover:border-[#db071d]/60"
+                          }`}
                       >
                         {plan}
                       </button>
