@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import LoanComingSoonCard from "@/components/LoanComingSoonCard";
 import Image from "next/image";
-// import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
 
 type SupabaseUser = {
   name: string;
@@ -19,6 +18,7 @@ type FormData = {
   phone: string;
   amount: string;
   utr: string;
+  planType: string; // ⬅ added
 };
 
 export default function UserDashboardPage() {
@@ -33,6 +33,7 @@ export default function UserDashboardPage() {
     phone: "",
     amount: "",
     utr: "",
+    planType: "Rental", // ⬅ added
   });
   const [popup, setPopup] = useState<{
     type: "success" | "error";
@@ -63,7 +64,9 @@ export default function UserDashboardPage() {
     router.replace("/sign-in");
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -117,6 +120,7 @@ export default function UserDashboardPage() {
         utr: form.utr,
         email: user.email,
         user_id: currentUser.id,
+        plan_type: form.planType, // ⬅ added to DB
       },
     ]);
 
@@ -127,7 +131,14 @@ export default function UserDashboardPage() {
         message: "❌ Payment submission failed. Please try again.",
       });
     } else {
-      setForm({ name: "", phone: "", amount: "", utr: "" });
+      setForm({
+        name: "",
+        phone: "",
+        amount: "",
+        utr: "",
+        planType: "Rental", // ⬅ reset
+      });
+
       setPopup({
         type: "success",
         message: `🚀 Welcome to REO!
@@ -155,7 +166,6 @@ Thank you for choosing REO.`,
 
   return (
     <div className="relative min-h-screen flex bg-black text-gray-900 overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0">
         <Image
           src="/images/mumbai.jpg"
@@ -168,14 +178,12 @@ Thank you for choosing REO.`,
 
       {/* MOBILE NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-black/60 backdrop-blur-md border-b border-[#db071d]/60 px-4 py-3 sm:hidden">
-        {/* LEFT: User Info */}
         <div className="flex flex-col text-left">
           <span className="text-white font-semibold text-sm leading-tight">
             {user?.name}
           </span>
         </div>
 
-        {/* CENTER: Nav Links */}
         <div className="flex space-x-4">
           {[
             "home",
@@ -217,7 +225,6 @@ Thank you for choosing REO.`,
           ))}
         </div>
 
-        {/* RIGHT: Logout Button */}
         <button
           onClick={handleLogout}
           className="px-3 py-1 bg-[#db071d] text-white text-xs font-semibold rounded-lg hover:bg-[#b40618] transition"
@@ -228,14 +235,12 @@ Thank you for choosing REO.`,
 
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden sm:flex relative z-20 w-64 bg-black/40 backdrop-blur-md border-r border-[#db071d]/60 flex-col justify-between py-8 px-6">
-        {/* Top Section */}
         <div>
-          {/* Company Logo */}
           <div className="flex justify-center mb-6">
             <Image
-              src="/images/logo_white.png" // 🟢 replace with your logo path
+              src="/images/logo_white.png"
               alt="Company Logo"
-              width={120} // adjust size as needed
+              width={120}
               height={120}
               className="object-contain"
               priority
@@ -250,7 +255,6 @@ Thank you for choosing REO.`,
             {user?.phone}
           </p>
 
-          {/* Navigation */}
           <div className="flex flex-col gap-3">
             {[
               "home",
@@ -293,7 +297,6 @@ Thank you for choosing REO.`,
           </div>
         </div>
 
-        {/* Bottom Section (Logout) */}
         <div className="flex flex-col items-center gap-4 pt-6 border-t border-white/10">
           <button
             onClick={handleLogout}
@@ -306,8 +309,6 @@ Thank you for choosing REO.`,
 
       {/* MAIN CONTENT */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-white mt-28 sm:mt-0">
-        {/* ✅ Trusted Seller Badge */}
-        {/* ✅ Trusted Seller Badge (always visible, fixed above everything) */}
         <div className="fixed top-20 right-3 sm:top-6 sm:right-6 z-[60]">
           <Image
             src="/images/trust_logo.png"
@@ -368,35 +369,6 @@ Thank you for choosing REO.`,
               >
                 reoheadquarter@gmail.com
               </a>
-
-              {/* <form
-                action="https://api.web3forms.com/submit"
-                method="POST"
-                className="space-y-4"
-              >
-                <input
-                  type="hidden"
-                  name="access_key"
-                  value="2756ba83-599a-443a-b5a1-1871d615f0db"
-                />
-
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  required
-                  className="w-full p-3 border border-gray-300 rounded-lg text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-[#db071d]/70 focus:outline-none"
-                />
-
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full py-3 bg-gradient-to-r from-[#db071d] to-[#a80a1a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition text-base"
-                >
-                  Send
-                </motion.button>
-              </form> */}
             </div>
           </motion.div>
         )}
@@ -494,6 +466,25 @@ Thank you for choosing REO.`,
                       required
                     />
                   ))}
+
+                  {/* NEW SELECT FIELD */}
+                  <div className="flex gap-3 justify-center">
+                    {["Rental", "One-time"].map((plan) => (
+                      <button
+                        key={plan}
+                        type="button"
+                        onClick={() => setForm({ ...form, planType: plan })}
+                        className={`flex-1 py-2.5 rounded-lg border text-sm font-semibold transition-all duration-300
+                                  ${
+                                    form.planType === plan
+                                      ? "bg-[#db071d] text-white border-[#db071d]"
+                                      : "bg-white text-gray-700 border-gray-300 hover:border-[#db071d]/60"
+                                  }`}
+                      >
+                        {plan}
+                      </button>
+                    ))}
+                  </div>
 
                   <motion.button
                     type="submit"
